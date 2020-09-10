@@ -61,3 +61,8 @@ getToken = function (headers) {
 };
 
 module.exports = router;
+
+
+// jwt.verify(token, getKey, options, function(err, decoded) {
+//   console.log(decoded.email)
+// });
