@@ -2,7 +2,7 @@ const Post = require('../models').Post;
 const User = require('../models').User;
 
 module.exports = {
-  list(req, res) {
+  list(req: any, res: any) {
     return Post
       .findAll({
         include: [{
@@ -10,11 +10,11 @@ module.exports = {
           as: 'User'
         }],
       })
-      .then((posts) => res.status(200).send(posts))
-      .catch((error) => { res.status(400).send(error); });
+      .then((posts: any) => res.status(200).send(posts))
+      .catch((error: any) => { res.status(400).send(error); });
   },
 
-  getById(req, res) {
+  getById(req: any, res: any) {
     return Post
       .findByPk(req.params.id, {
         include: [{
@@ -22,7 +22,7 @@ module.exports = {
           as: 'User'
         }],
       })
-      .then((post) => {
+      .then((post: any) => {
         if (!post) {
           return res.status(404).send({
             message: 'Profile Not Found',
@@ -30,10 +30,10 @@ module.exports = {
         }
         return res.status(200).send(post);
       })
-      .catch((error) => res.status(400).send(error));
+      .catch((error: any) => res.status(400).send(error));
   },
 
-  add(req, res) {
+  add(req: any, res: any) {
     console.log(req.body)
     return Post
       .create({
@@ -42,7 +42,7 @@ module.exports = {
         publish_date: req.body.publish_date,
         description: req.body.description,
       })
-      .then((post) => res.status(201).send(post))
-      .catch((error) => res.status(400).send(error));
+      .then((post: any) => res.status(201).send(post))
+      .catch((error: any) => res.status(400).send(error));
   },
 };
