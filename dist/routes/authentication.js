@@ -5,15 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var passport = require('passport');
+var user_1 = require("../models/user");
 var router = express_1.default.Router();
-var User = require('../models').User;
 router.post('/signup', function (req, res) {
     if (!req.body.username || !req.body.password) {
         res.status(400).send({ msg: 'Please pass username and password to success user request' });
     }
     else {
-        User.create({
+        user_1.User.create({
             username: req.body.username,
             password: req.body.password
         })
@@ -24,7 +23,8 @@ router.post('/signup', function (req, res) {
     }
 });
 router.post('/signin', function (req, res) {
-    User.findOne({
+    console.log(req.body);
+    user_1.User.findOne({
         where: {
             username: req.body.username
         }
@@ -50,18 +50,4 @@ router.post('/signin', function (req, res) {
     })
         .catch(function (error) { return res.status(400).send(error); });
 });
-var getToken = function (headers) {
-    if (headers && headers.authorization) {
-        var parted = headers.authorization.split(' ');
-        if (parted.length === 2) {
-            return parted[1];
-        }
-        else {
-            return null;
-        }
-    }
-    else {
-        return null;
-    }
-};
 module.exports = router;

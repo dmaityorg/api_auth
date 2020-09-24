@@ -24,25 +24,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = __importStar(require("fs"));
 var path_1 = __importDefault(require("path"));
-var Sequelize = require('sequelize');
+var sequelize_1 = require("sequelize");
 var basename = path_1.default.basename(__filename);
 var env = process.env.NODE_ENV || 'development';
 var config = require(__dirname + '/../config/config.json')[env];
 var db = {};
 var sequelize;
-if (config.use_env_variable) {
-    sequelize = new Sequelize(process.env[config.use_env_variable], config);
-}
-else {
-    sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+sequelize = new sequelize_1.Sequelize(config.database, config.username, config.password, config);
 fs
     .readdirSync(__dirname)
     .filter(function (file) {
     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
 })
     .forEach(function (file) {
-    var model = require(path_1.default.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    var modelInstance = require(path_1.default.join(__dirname, file));
+    var model = modelInstance.initialize(sequelize);
     db[model.name] = model;
 });
 Object.keys(db).forEach(function (modelName) {
@@ -51,5 +47,6 @@ Object.keys(db).forEach(function (modelName) {
     }
 });
 db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+db.Sequelize = sequelize_1.Sequelize;
 module.exports = db;
+exports.default = db;

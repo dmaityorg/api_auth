@@ -1,11 +1,9 @@
-import express from "express";
+import express, { Request, Response, Router, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import passport from "passport";
+import { User, UserRequestAttributes } from '../models/user';
+const router: Router = express.Router();
 
-const router = express.Router();
-const User = require('../models').User;
-
-router.post('/signup', function(req: any, res: any) {
+router.post('/signup', function(req: Request, res: Response) {
   if (!req.body.username || !req.body.password) {
     res.status(400).send({msg: 'Please pass username and password to success user request'})
   } else {
@@ -13,14 +11,15 @@ router.post('/signup', function(req: any, res: any) {
       username: req.body.username,
       password: req.body.password
     })
-    .then((user: any) => res.status(201).send(user))
+    .then((user: User) => res.status(201).send(user))
     .catch((error: any) => {
       res.status(400).send(error);
     });
   }
 });
 
-router.post('/signin', function(req: any, res: any) {
+router.post('/signin', function(req: Request, res: Response) {
+  console.log(req.body);
   User.findOne({
       where: {
         username: req.body.username
@@ -46,18 +45,5 @@ router.post('/signin', function(req: any, res: any) {
     })
     .catch((error: any) => res.status(400).send(error));
   });
-
- let getToken = function (headers: any) {
-  if (headers && headers.authorization) {
-    var parted = headers.authorization.split(' ');
-    if (parted.length === 2) {
-      return parted[1];
-    } else {
-      return null;
-    }
-  } else {
-    return null;
-  }
-};
 
 module.exports = router;

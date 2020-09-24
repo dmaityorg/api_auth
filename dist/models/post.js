@@ -13,40 +13,36 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-// const {
-//   Model
-// } = require('sequelize');
+exports.initialize = exports.Post = void 0;
 var sequelize_1 = require("sequelize");
-module.exports = function (sequelize, DataTypes) {
-    var Post = /** @class */ (function (_super) {
-        __extends(Post, _super);
-        function Post() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        /**
-         * Helper method for defining associations.
-         * This method is not a part of Sequelize lifecycle.
-         * The `models/index` file will call this method automatically.
-         */
-        Post.associate = function (models) {
-            // define association here
-        };
-        return Post;
-    }(sequelize_1.Model));
-    ;
-    Post.init({
-        title: DataTypes.STRING,
-        description: DataTypes.STRING,
-        publish_date: DataTypes.DATE,
-        user_id: DataTypes.INTEGER
-    }, {
-        sequelize: sequelize,
-        modelName: 'Post',
-    });
+;
+var Post = /** @class */ (function (_super) {
+    __extends(Post, _super);
+    function Post() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
     Post.associate = function (models) {
-        Post.belongsTo(models.User, {
-            foreignKey: 'user_id'
-        });
+        Post.belongsTo(models.User);
     };
     return Post;
+}(sequelize_1.Model));
+exports.Post = Post;
+;
+exports.initialize = function (sequelize) {
+    Post.init({
+        id: {
+            type: sequelize_1.DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
+        user_id: sequelize_1.DataTypes.INTEGER,
+        title: sequelize_1.DataTypes.STRING,
+        description: sequelize_1.DataTypes.STRING,
+        publish_date: sequelize_1.DataTypes.DATE
+    }, {
+        sequelize: sequelize,
+        modelName: 'Post'
+    });
+    return Post;
 };
+exports.default = exports.initialize;

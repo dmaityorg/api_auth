@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var createError = require('http-errors');
 var express = require('express');
-//var path = require('path');
 var path_1 = __importDefault(require("path"));
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
