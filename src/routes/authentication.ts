@@ -12,26 +12,31 @@ router.post('/signup', function(req: Request, res: Response) {
       password: req.body.password
     })
     .then((user: User) => res.status(201).send(user))
-    .catch((error: any) => {
+    .catch((error) => {
+      console.log(error)
       res.status(400).send(error);
     });
   }
 });
 
 router.post('/signin', function(req: Request, res: Response) {
-  console.log(req.body);
+  console.log("+++++++++1 " )
   User.findOne({
       where: {
         username: req.body.username
       }
     })
     .then((user: any) => {
+      console.log("+++++++++1 " + user)
       if (!user) {
         return res.status(401).send({
           message: 'Authentication failed. User not found or Missmatch username and password',
         });
       }
+      console.log("+++++++++2 " + user)
       user.comparePassword(req.body.password, (err: any, isMatch: any) => {
+        console.log("+++++++++3 " +  isMatch)
+
         if(isMatch && !err) {
           var token = jwt.sign(JSON.parse(JSON.stringify(user)), 'nodeauthsecret', {expiresIn: 86400 * 30});
           jwt.verify(token, 'nodeauthsecret', function(err: any, data: any){

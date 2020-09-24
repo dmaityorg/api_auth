@@ -11,8 +11,8 @@ export interface UserRequestAttributes {
 
 interface UserAttributes extends UserRequestAttributes {
 id: number;
-createdAt?: Date;
-updatedAt?: Date;
+created_at?: Date;
+updated_at?: Date;
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, "id" | "password"> {}
@@ -22,8 +22,8 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public username!: string;
   public password!: string;
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly created_at!: Date;
+  public readonly updated_at!: Date;
 
   public comparePassword(password: string): Promise<boolean> {
     return comparePasswords(password, this.password);
@@ -35,30 +35,31 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
 };
 
 export const initialize = (sequelize: Sequelize) => {
-User.init({
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },  
-  username: DataTypes.STRING,
-  password: DataTypes.STRING,
-  createdAt: DataTypes.DATE,
-  updatedAt: DataTypes.DATE
-}, {
-  sequelize,
-  modelName: 'User',
-  underscored: true,
-  hooks: {
-    beforeCreate: async (user, options) => {
-      if (user.password) {
-        const hashedPassword = await hashPassword(user.password);
-        user.password = hashedPassword;
+  User.init({
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },  
+    username: DataTypes.STRING,
+    password: DataTypes.STRING,
+    created_at: DataTypes.DATE,
+    updated_at: DataTypes.DATE
+  }, {
+    sequelize,
+    modelName: 'User',
+    underscored: true,
+    hooks: {
+      beforeCreate: async (user, options) => {
+        if (user.password) {
+          const hashedPassword = await hashPassword(user.password);
+          user.password = hashedPassword;
+        }
       }
-    }
-  }
-});
-return User;
+    },  
+  });
+  
+  return User;
 };
 
 export default initialize;

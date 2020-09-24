@@ -22,26 +22,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var fs = __importStar(require("fs"));
-var path_1 = __importDefault(require("path"));
-var sequelize_1 = require("sequelize");
-var basename = path_1.default.basename(__filename);
-var env = process.env.NODE_ENV || 'development';
-var config = require(__dirname + '/../config/config.json')[env];
-var db = {};
-var sequelize;
+const fs = __importStar(require("fs"));
+const path_1 = __importDefault(require("path"));
+const sequelize_1 = require("sequelize");
+const basename = path_1.default.basename(__filename);
+const env = process.env.NODE_ENV || 'development';
+const config = require(__dirname + '/../config/config.json')[env];
+const db = {};
+let sequelize;
 sequelize = new sequelize_1.Sequelize(config.database, config.username, config.password, config);
 fs
     .readdirSync(__dirname)
-    .filter(function (file) {
+    .filter(file => {
     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
 })
-    .forEach(function (file) {
-    var modelInstance = require(path_1.default.join(__dirname, file));
-    var model = modelInstance.initialize(sequelize);
+    .forEach(file => {
+    const modelInstance = require(path_1.default.join(__dirname, file));
+    const model = modelInstance.initialize(sequelize);
     db[model.name] = model;
 });
-Object.keys(db).forEach(function (modelName) {
+Object.keys(db).forEach(modelName => {
     if (db[modelName].associate) {
         db[modelName].associate(db);
     }

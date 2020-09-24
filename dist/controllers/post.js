@@ -1,8 +1,8 @@
 "use strict";
-var Post = require('../models').Post;
-var User = require('../models').User;
+const Post = require('../models').Post;
+const User = require('../models').User;
 module.exports = {
-    list: function (req, res) {
+    list(req, res) {
         return Post
             .findAll({
             include: [{
@@ -10,10 +10,10 @@ module.exports = {
                     as: 'User'
                 }],
         })
-            .then(function (posts) { return res.status(200).send(posts); })
-            .catch(function (error) { res.status(400).send(error); });
+            .then((posts) => res.status(200).send(posts))
+            .catch((error) => { res.status(400).send(error); });
     },
-    getById: function (req, res) {
+    getById(req, res) {
         return Post
             .findByPk(req.params.id, {
             include: [{
@@ -21,7 +21,7 @@ module.exports = {
                     as: 'User'
                 }],
         })
-            .then(function (post) {
+            .then((post) => {
             if (!post) {
                 return res.status(404).send({
                     message: 'Profile Not Found',
@@ -29,9 +29,9 @@ module.exports = {
             }
             return res.status(200).send(post);
         })
-            .catch(function (error) { return res.status(400).send(error); });
+            .catch((error) => res.status(400).send(error));
     },
-    add: function (req, res) {
+    add(req, res) {
         console.log(req.body);
         return Post
             .create({
@@ -40,7 +40,7 @@ module.exports = {
             publish_date: req.body.publish_date,
             description: req.body.description,
         })
-            .then(function (post) { return res.status(201).send(post); })
-            .catch(function (error) { return res.status(400).send(error); });
+            .then((post) => res.status(201).send(post))
+            .catch((error) => res.status(400).send(error));
     },
 };
