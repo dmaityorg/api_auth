@@ -48,7 +48,7 @@ exports.initialize = (sequelize) => {
                     user.password = hashedPassword;
                 }
             })
-        }
+        },
     });
     return User;
 };

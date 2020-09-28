@@ -20,7 +20,6 @@ router.post('/signup', function(req: Request, res: Response) {
 });
 
 router.post('/signin', function(req: Request, res: Response) {
-  console.log("+++++++++1 " )
   User.findOne({
       where: {
         username: req.body.username

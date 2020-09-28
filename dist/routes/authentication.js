@@ -24,7 +24,6 @@ router.post('/signup', function (req, res) {
     }
 });
 router.post('/signin', function (req, res) {
-    console.log("+++++++++1 ");
     user_1.User.findOne({
         where: {
             username: req.body.username
@@ -38,18 +37,19 @@ router.post('/signin', function (req, res) {
             });
         }
         console.log("+++++++++2 " + user);
-        var token = jsonwebtoken_1.default.sign(JSON.parse(JSON.stringify(user)), 'nodeauthsecret', { expiresIn: 86400 * 30 });
-        jsonwebtoken_1.default.verify(token, 'nodeauthsecret', function (err, data) {
-            console.log(err, data);
+        user.comparePassword(req.body.password, (err, isMatch) => {
+            console.log("+++++++++3 " + isMatch);
+            if (isMatch && !err) {
+                var token = jsonwebtoken_1.default.sign(JSON.parse(JSON.stringify(user)), 'nodeauthsecret', { expiresIn: 86400 * 30 });
+                jsonwebtoken_1.default.verify(token, 'nodeauthsecret', function (err, data) {
+                    console.log(err, data);
+                });
+                res.json({ success: true, token: 'JWT ' + token });
+            }
+            else {
+                res.status(401).send({ success: false, msg: 'Authentication failed. Wrong password.' });
+            }
         });
-        res.json({ success: true, token: 'JWT ' + token });
-        // user.comparePassword(req.body.password, (err: any, isMatch: any) => {
-        //   console.log("+++++++++3 " +  isMatch)
-        //   if(isMatch && !err) {
-        //   } else {
-        //     res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.'});
-        //   }
-        // })
     })
         .catch((error) => res.status(400).send(error));
 });

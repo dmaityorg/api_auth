@@ -1,48 +1,47 @@
-const Post = require('../models').Post;
-const User = require('../models').User;
+import {User, UserRequestAttributes} from '../models/user';
+import {Post, PostAttributes} from '../models/post';
+import { Request, Response }  from "express";
+import createHttpError from 'http-errors';
+import { StatusCodes } from 'http-status-codes';
+import models from '../models';
 
-module.exports = {
-  list(req: any, res: any) {
-    return Post
-      .findAll({
-        include: [{
-          model: User,
-          as: 'User'
-        }],
-      })
-      .then((posts: any) => res.status(200).send(posts))
-      .catch((error: any) => { res.status(400).send(error); });
-  },
+export const findAllPost  =  async (req:Request , res:Response , next:any) => {
+  try {
+    const post = await models.Post.findAll();
+    return res.status(200).json(post);
+  } catch (error) {
+    return next(createHttpError(StatusCodes.INTERNAL_SERVER_ERROR, error))
+  }
+};
 
-  getById(req: any, res: any) {
-    return Post
-      .findByPk(req.params.id, {
-        include: [{
-          model: User,
-          as: 'User'
-        }],
-      })
-      .then((post: any) => {
-        if (!post) {
-          return res.status(404).send({
-            message: 'Profile Not Found',
-          });
-        }
-        return res.status(200).send(post);
-      })
-      .catch((error: any) => res.status(400).send(error));
-  },
+export const createPost = async (req:Request, res:Response, next:any) =>{ 
+  try {
+    const post = await models.Post.findOne({
+      where: {
+        title: req.body.title
+      }
+    });
+    if (post) {
+      return res.status(200).json({ 'Message' :"Post already present" });
+    }else{
+      const postDetails: PostAttributes = req.body;
+      const newPost: Post = await models.Post.create(postDetails);
+      return res.status(200).json({ 'Message' :"Post successfully created" });
+    } 
+  } catch (error) {
+    return next(createHttpError(StatusCodes.INTERNAL_SERVER_ERROR, error))
+  } 
+};
 
-  add(req: any, res: any) {
-    console.log(req.body)
-    return Post
-      .create({
-        user_id: req.body.user_id,
-        title: req.body.title,
-        publish_date: req.body.publish_date,
-        description: req.body.description,
-      })
-      .then((post: any) => res.status(201).send(post))
-      .catch((error: any) => res.status(400).send(error));
-  },
+export const findPost = async (req:Request, res:Response, next:any) =>{ 
+  try {
+    const post = await models.Post.findByPk(req.params.id);
+    if (post) {
+      return res.status(200).json(post);
+    }else{
+      return res.status(200).json({ 'Message' :"Can Not find" });
+    } 
+  } catch (error) {
+    return next(createHttpError(StatusCodes.INTERNAL_SERVER_ERROR, error))
+  } 
 };

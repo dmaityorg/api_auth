@@ -10,9 +10,9 @@ export interface UserRequestAttributes {
 };
 
 interface UserAttributes extends UserRequestAttributes {
-id: number;
-created_at?: Date;
-updated_at?: Date;
+  id: number;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, "id" | "password"> {}
@@ -32,6 +32,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public static associate(models: any) {
     User.hasMany(models.Post)
   };
+  
 };
 
 export const initialize = (sequelize: Sequelize) => {

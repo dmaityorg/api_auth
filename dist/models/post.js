@@ -23,7 +23,8 @@ exports.initialize = (sequelize) => {
         publish_date: sequelize_1.DataTypes.DATE
     }, {
         sequelize,
-        modelName: 'Post'
+        modelName: 'Post',
+        underscored: true,
     });
     return Post;
 };
