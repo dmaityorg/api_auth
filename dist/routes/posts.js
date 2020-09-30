@@ -28,5 +28,6 @@ const postController = __importStar(require("../controllers/post"));
 router.get("/posts", postController.findAllPost);
 router.post("/posts", postController.createPost);
 router.get("/post/:id", postController.findPost);
+router.put("/posts/:id", postController.updatePost);
 module.exports = router;
 exports.default = router;

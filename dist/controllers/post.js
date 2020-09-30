@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findPost = exports.createPost = exports.findAllPost = void 0;
+exports.updatePost = exports.findPost = exports.createPost = exports.findAllPost = void 0;
 const http_errors_1 = __importDefault(require("http-errors"));
 const http_status_codes_1 = require("http-status-codes");
 const models_1 = __importDefault(require("../models"));
@@ -53,6 +53,23 @@ exports.findPost = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         }
         else {
             return res.status(200).json({ 'Message': "Can Not find" });
+        }
+    }
+    catch (error) {
+        return next(http_errors_1.default(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR, error));
+    }
+});
+exports.updatePost = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const post = yield models_1.default.Post.findByPk(req.params.id);
+        if (post) {
+            const postDetails = req.body;
+            console.log(postDetails);
+            const newPost = yield models_1.default.Post.update(postDetails, { where: { id: post.id } }, { transaction: true });
+            return res.status(200).json({ 'Post': post, 'Message': "Post successfully Updated" });
+        }
+        else {
+            return res.status(200).json({ 'Message': "Can Not find Post" });
         }
     }
     catch (error) {
