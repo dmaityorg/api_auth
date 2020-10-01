@@ -4,14 +4,16 @@ const chaiHttp = require('chai-http');
 let should = chai.should();
 let expect = chai.expect;
 var ServerAddr;
-//const app = require('../app');
+//var app = require('../app');
+//const app = require('../../app');
+//const http = require('http').createServer(app).listen(3000);
 
 chai.use(chaiHttp);
 var post;
 
 describe('Post curd operation', () => {
   before(function () {
-    ServerAddr = 'http://localhost:3000/';
+    ServerAddr = 'http://localhost:5050/';
     post = { title: 'The Book' , description: 'The Book description', user_id: 1 }
   })
 
@@ -23,7 +25,7 @@ describe('Post curd operation', () => {
   describe("GET /api/posts", () => {
     it("Display all posts", function (done) {
       chai.request(ServerAddr)
-        .get('/api/posts')
+        .get('api/posts')
         .end((err, res) => {
           if (err) {
             console.log("Print error ", err)
