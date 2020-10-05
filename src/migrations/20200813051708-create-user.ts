@@ -1,30 +1,31 @@
 'use strict';
+import { QueryInterface, Sequelize, DataTypes } from 'sequelize'
 module.exports = {
-  up: async (queryInterface: any, Sequelize: any) => {
+  up: async (queryInterface: QueryInterface, Sequelize: Sequelize) => {
     await queryInterface.createTable('Users', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: DataTypes.INTEGER
       },
       username: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING
       },
       password: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: DataTypes.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: DataTypes.DATE
       }
     });
   },
-  down: async (queryInterface: any, Sequelize: any) => {
+  down: async (queryInterface: QueryInterface, Sequelize: Sequelize) => {
     await queryInterface.dropTable('Users');
   }
 };

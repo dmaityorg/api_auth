@@ -7,3 +7,4 @@ router.get('/', function(req: any, res: any, next: any) {
 });
 
 module.exports = router;
+export default router;
